@@ -1,0 +1,38 @@
+GitHub
+
+● GitHub에 코드를 업로드하는 절차
+1. 문자(아무거나)가 적힌 파일 생성
+
+2. ssh-keygen -t ed25519 -C "your_email@example.com" <- 입력 후 Enter 계속 클릭. "" 안에 GitHub 로그인 메일 계정 
+
+3. eval "$(ssh-agent -s)" <- 입력
+
+4. ssh-add ~/.ssh/id_ed25519 <- 입력
+
+5. cat ~/.ssh/id_ed25519.pub <- 입력 후 출력된 문자열 복사
+
+6. https://github.com/settings/keys에 들어가서 New SSH key 클릭 후 Key에 복사한 문자열 붙여넣기 후 Add SSH key 클릭
+
+7. sudo apt update  <- 입력
+
+8. sudo apt install git  <- 입력
+
+9. git config --global user.name "Your Name"  <- 입력. "" 안에 GitHub 닉네임
+
+10. git config --global user.email "your-email@example.com"  <- 입력. "" 안에 GitHub 로그인 메일 계정 
+
+11. cd ~/...  <- 입력. 원하는 작업 디렉터리로 이동
+
+12. git init  <- 입력
+
+13. git add .  <- 입력
+
+14. git commit -m "Initial commit"  <- 입력. "" 안에 본인이 입력하고 싶은 문자
+
+15. GitHub 웹사이트 > 우측 상단 '+' 버튼 > "New repository" 클릭 후 저장소 이름 설정 후 "Create repository"
+
+16. git remote add origin git@github.com:your-username/your-repository.git <- 입력. git@github.com:~은 만든 리포지토리에 있는 SSH 버튼 클릭
+
+17. git branch -M main  <- 입력
+
+18. git push -u origin main  <- 입력
