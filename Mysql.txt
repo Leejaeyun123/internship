@@ -1,0 +1,97 @@
+MySQL
+
+● root 권한은 리눅스 시스템이나 MySQL과 같은 데이터베이스에서 모든 작업을 수행할 수 있는 최고 수준의 관리자 권한
+
+● 현재 호스트 OS(예: Windows)에서 직접 실행 중인 MySQL 서버에 접속하는 경우 → 로컬(local)
+   VMware 내에서 돌아가는 Linux가 별도 IP (예: 192.168.x.x)를 가지고 있고, 그 안에서 MySQL이 구동되는 경우 → 원격(remote)
+
+● 데이터베이스 및 테이블 생성 절차
+1. 파일명.sql 파일 생성 후 ex)에 있는 코드를 본인이 원하는 문자로 수정해서 입력
+ex) CREATE DATABASE IF NOT EXISTS sensor;                 
+    USE sensor;                                           
+
+    CREATE TABLE IF NOT EXISTS sensor_log (              
+        id INT AUTO_INCREMENT PRIMARY KEY,      
+        device_ip VARCHAR(45) NOT NULL,          
+        message TEXT NOT NULL,                   
+        received_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    );
+CREATE DATABASE / TABLE: sensor라는 데이터베이스 또는 sensor_log라는 테이블이 없다면 새로 생성
+USE sensor: 이후의 모든 SQL 문장을 sensor 데이터베이스에서 실행하도록 설정
+IF NOT EXISTS: sensor라는 데이터베이스 또는 sensor_log라는 테이블이 없을 때만 생성 (중복 생성 방지)
+컬럼명: 테이블에 포함될 필드 이름(id, device_ip, message, received_at)
+자료형: 해당 컬럼의 데이터 형식 (예: INT, VARCHAR, TEXT, TIMESTAMP)
+제약조건: AUTO_INCREMENT, NOT NULL, PRIMARY KEY, DEFAULT CURRENT_TIMESTAMP
+
+2. mysql -u root -p < 파일명.sql  <- 파일이 있는 경로로 들어가서 입력. 파일명.sql 실행
+-u root: MySQL 내부의 루트 사용자
+-p: 비밀번호 입력을 위한 옵션
+
+● MySQL에 연결된 상태에서 존재하는 데이터베이스 목록과 각 데이터베이스 내부의 테이블 목록 및 구조를 조회하는 방법
+1. sudo mysql    <- 입력
+
+2. CREATE USER 'root'@'%' IDENTIFIED BY '원하는 비밀번호';
+   GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' WITH GRANT OPTION;
+   FLUSH PRIVILEGES;    <- 한 줄씩 입력. 모든 IP에 대해 허용
+
+3. sudo nano /etc/mysql/mysql.conf.d/mysqld.cnf     <- 입력
+
+4. bind-address = 0.0.0.0   <- 찾아서 수정. 모든 네트워크 인터페이스(IP)에서의 접속을 허용
+
+5. sudo systemctl restart mysql     <- 입력. 서버 재시작
+
+6. sudo netstat -tnlp | grep 3306   <- 입력. 정상 동작(포트 3306이 외부에 열렸는지) 확인
+
+7. sudo mysql   <- 입력
+
+8. SELECT host, user FROM mysql.user WHERE user = 'root';   <- 입력. 현재 root 계정 권한 확인
+
+9. +-----------+------+
+   | host      | user |
+   +-----------+------+
+   | %         | root |     <- 원격 접속 허용
+   | localhost | root |     <- 로컬 전용 
+   +-----------+------+
+   2 rows in set (0.00 sec)
+
+10. sudo mysql  <- 입력. mysql -u root -p 입력 후 ERROR 1698 (28000): Access denied for user 'root'@'localhost' 에러 문구 출력 시
+
+11. ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY '원하는 비밀번호';
+    FLUSH PRIVILEGES;   <- 한 줄씩 입력. 소켓 인증에서 비밀번호 인증으로 전환. 로컬에서의 root 사용 용도
+
+12. mysql -u root -p -h 192.168.x.xx    <- 1~6번까지 진행 후 입력. 원격에서의 root 사용 용도
+
+11, 12. - 1. SHOW DATABASES;     <-  입력. 존재하는 데이터베이스 목록 확인
+
+11, 12. - 2. USE DB 이름;     <-     입력. 특정 데이터베이스 선택      ex)  USE sensor;
+
+11, 12. - 3. SHOW TABLES;    <-      입력. 해당 데이터베이스에 있는 테이블 목록 확인
+
+11, 12. - 4. DESCRIBE 테이블 이름;    <- 입력. 테이블 구조 확인      ex) DESCRIBE sensor_log;
+
+● 테이블 내용 전체 조회
+1. mysql -u root -p   <- 입력
+
+2. USE DB 이름;  <-     입력
+
+3. SELECT * FROM 테이블 이름; <-    입력
+
+● 테이블 구조는 그대로 유지한 채, 저장된 데이터만 삭제
+1. mysql -u root -p     <- 입력
+
+2. USE DB 이름;     <-입력
+
+3. TRUNCATE TABLE sensor_log;   <- 입력
+
+● 데이터베이스 또는 테이블 삭제
+1. mysql -u root -p   <- 입력
+
+2. DROP DATABASE DB 이름 / TABLE 테이블 이름;   <- 입력. 테이블은 USE DB 이름; 실행 후 입력
+
+
+
+
+
+
+
+
