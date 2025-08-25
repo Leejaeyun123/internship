@@ -1,0 +1,9 @@
+● OpenWrt의 정의와 특징 및 장점
+OpenWrt는 임베디드 장치, 특히 무선 라우터에 사용되는 리눅스 기반의 운영 체제입니다. 제조사 펌웨어의 제한을 넘어 사용자가 장치를 자유롭게 제어하고, 다양한 기능을 추가할 수 있도록 해주는 것이 특징
+
+
+● 개발 환경 설정(필요한 패키지를 설치 -> OpenWrt 소스 코드를 다운로드 -> 컴파일 설정 -> 펌웨어를 빌드)
+1. sudo apt-get update <- 입력. OpenWrt 빌드를 위해 필요한 패키지(소스 코드 관리, 컴파일러, 라이브러리, 스크립트 실행에 필요한 도구)들을 설치
+2. sudo apt-get install git-core build-essential libncurses5-dev gawk zlib1g-dev libssl-dev ccache libffi-dev unzip python python2-dev python3-distutils file wget <- 입력. //
+3. mkdir openwrt -> cd openwrt <- 입력. 소스 코드를 다운로드할 폴더 생성 후 안으로 이동
+4. git clone https://git.openwrt.org/openwrt/openwrt.git . <- 입력. 현재 디렉토리에 OpenWrt 소스 코드를 복제
