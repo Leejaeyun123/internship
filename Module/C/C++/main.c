@@ -1,4 +1,5 @@
 // 함수 호출
+// gcc -o math main.c math_functions.c -> ./math
 
 #include <stdio.h>
 #include "math_functions.h"
