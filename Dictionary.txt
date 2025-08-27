@@ -60,6 +60,8 @@ ex)
     }
 }
 
+5. key와 value에 반드시 ""만 사용. 마지막 요소 뒤에 쉼표 X ex) {"name": "ljy", "age": 20,} <- X. 주석 허용 X
+
 ● JSON 파서
 1. JSON 파서(parser)는 JSON 데이터를 우리가 사용하는 프로그래밍 언어의 변수나 배열, 객체 등으로 바꿔주는 번역기 역할을 하며 크게 토큰화(tokenization)와 구문 분석(parsing)을 수행
 
@@ -88,3 +90,6 @@ json.loads()나 JSON.parse()와 같은 함수가 JSON 파서의 역할을 수행
 종류        별도의 모듈                             언어의 내장 객체
 사용 방식   import json으로 불러와서 사용            별도의 과정 없이 바로 사용 가능
 기능        문자열과 파일 I/O를 모두 지원            주로 문자열 변환 기능 제공
+
+3. C/C++은 Python처럼 JSON을 직접 다루는 내장 기능이 없기 때문에 외부 라이브러리(json-c, nlohmann/json)를 사용해야 함
+

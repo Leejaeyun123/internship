@@ -1,0 +1,68 @@
+{
+  "Title": "requirement1",
+  "NodeNum": 2,
+  "NodeId": ["client", "server"],
+  "MessageSequence": [
+    {
+      "seqNum": 1,
+      "label": "ClientHello",
+      "from": "client",
+      "to": "server",
+      "content": {
+        "contentType": "handshake",
+        "version": "TLS-12",
+        "recordLen": "valid",
+        "handshakeType": "client-hello",
+        "handshakeLen": "valid",
+        "protocol": "TLS-12",
+        "cipherSuites": ["TLS-AES-128-CCM-SHA256", "TLS-AES-256-CCM-SHA256"],
+        "cipherSuitesLen": "valid",
+        "random": "nonce(AI, 3)",
+        "sessionID": "noNonce",
+        "compression": "no-compression",
+        "extension": {
+          "signatureAlgorithm": [
+            "ecdsa-secp256r1-sha256", "ecdsa-secp256k1-sha256"
+          ],
+          "supportedGroups": ["secp256r1", "secp256k1"],
+          "keyshareEntry": "ecdhe(nonce(CI, 2))"
+        }
+      }
+    },
+    {
+      "seqNum": 2,
+      "label": "ServerHello",
+      "from": "server",
+      "to": "client",
+      "content": {
+        "contentType": "handshake",
+        "version": "TLS-12",
+        "recordLen": "valid",
+        "handshakeType": "server-hello",
+        "handshakeLen": "valid",
+        "protocol": "TLS-12",
+        "cipherSuites": "TLS-AES-128-GCM-SHA256",
+        "random": "nonce(SI, 2)",
+        "sessionID": "nonce(SI, 3)",
+        "sessionIDLen": "valid",
+        "compression": "no-compression",
+        "extension": {
+            "keyshareEntry": "ecdhe(nonce(SI, 2))"
+        }
+      }
+    },
+    {
+      "seqNum": 3,
+      "label": "Alert",
+      "from": "client",
+      "to": "server",
+      "content": {
+        "contentType": "alert",
+        "version": "TLS-12",
+        "recordLen": "valid",
+        "alertLevel": "fatal",
+        "alertDescription": "illegal-parameter"
+      }
+    }
+  ]
+}
