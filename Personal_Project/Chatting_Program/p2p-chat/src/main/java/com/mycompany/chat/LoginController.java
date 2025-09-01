@@ -27,8 +27,8 @@ public class LoginController {
 
     // 데이터베이스 연결 정보를 상수로 정의하여 관리 용이성을 높임
     private static final String DB_URL = "jdbc:mysql://localhost:3306/chat_app?serverTimezone=UTC";
-    private static final String DB_USER = "your_user";
-    private static final String DB_PASSWORD = "your_password";
+    private static final String DB_USER = "root";
+    private static final String DB_PASSWORD = "ljy";
 
     @FXML
     protected void handleLogInButtonAction() {

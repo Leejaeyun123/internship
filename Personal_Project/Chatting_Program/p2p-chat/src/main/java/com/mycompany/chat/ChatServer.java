@@ -19,8 +19,8 @@ public class ChatServer {
     
     // 데이터베이스 연결 정보
     private static final String DB_URL = "jdbc:mysql://localhost:3306/chat_app?serverTimezone=UTC";
-    private static final String DB_USER = "your_user";
-    private static final String DB_PASSWORD = "your_password";
+    private static final String DB_USER = "root";
+    private static final String DB_PASSWORD = "ljy";
 
     public static void main(String[] args) {
         System.out.println("서버가 " + PORT + "번 포트에서 시작되었습니다.");
