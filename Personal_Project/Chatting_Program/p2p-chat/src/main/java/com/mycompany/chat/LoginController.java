@@ -1,10 +1,17 @@
+// 사용자의 로그인 및 회원가입 요청을 처리하고, 로그인 성공 시 채팅방 화면으로 전환하는 역할을 함
+
 package com.mycompany.chat;
 
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
 import org.mindrot.jbcrypt.BCrypt;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -45,6 +52,7 @@ public class LoginController {
                 if (BCrypt.checkpw(password, hashedPassword)) {
                     System.out.println("로그인 성공!");
                     // TODO: 로그인 성공 시 채팅방 화면으로 전환하는 로직 구현
+                    loadChatRoom(username); // 로그인 성공 시 호출
                 } else {
                     System.out.println("로그인 실패: 비밀번호가 일치하지 않습니다.");
                 }
@@ -84,6 +92,27 @@ public class LoginController {
                 System.out.println("데이터베이스 오류가 발생했습니다: " + e.getMessage());
                 e.printStackTrace();
             }
+        }
+    }
+
+    private void loadChatRoom(String username) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/chat_room.fxml"));
+            Parent chatRoomRoot = loader.load();
+            
+            ChatRoomController controller = loader.getController();
+            
+            // ChatClient 객체 생성 및 ChatRoomController에 전달
+            ChatClient client = new ChatClient("localhost", 8000, controller);
+            controller.setClient(client);
+
+            Stage stage = (Stage) idField.getScene().getWindow();
+            stage.setScene(new Scene(chatRoomRoot));
+            stage.setTitle("채팅방 - " + username);
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+            // TODO: UI에 오류 메시지 표시
         }
     }
 }
