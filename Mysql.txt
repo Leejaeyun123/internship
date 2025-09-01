@@ -23,7 +23,8 @@ IF NOT EXISTS: sensor라는 데이터베이스 또는 sensor_log라는 테이블
 자료형: 해당 컬럼의 데이터 형식 (예: INT, VARCHAR, TEXT, TIMESTAMP)
 제약조건: AUTO_INCREMENT, NOT NULL, PRIMARY KEY, DEFAULT CURRENT_TIMESTAMP
 
-2. mysql -u root -p < 파일명.sql  <- 파일이 있는 경로로 들어가서 입력. 파일명.sql 실행
+2. mysql -u root -p < 파일명.sql  <- 파일이 있는 경로로 들어가서 입력. 로컬 서버에서 파일명.sql 실행
+   mysql -u root -p -h 192.168.x.xx < 파일명.sql <- 파일이 있는 경로로 들어가서 입력. 원격 서버에서 파일명.sql 실행
 -u root: MySQL 내부의 루트 사용자
 -p: 비밀번호 입력을 위한 옵션
 
@@ -34,7 +35,7 @@ IF NOT EXISTS: sensor라는 데이터베이스 또는 sensor_log라는 테이블
    GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' WITH GRANT OPTION;
    FLUSH PRIVILEGES;    <- 한 줄씩 입력. 모든 IP에 대해 허용
 
-3. sudo nano /etc/mysql/mysql.conf.d/mysqld.cnf     <- 입력
+3. sudo nano /etc/mysql/mysql.conf.d/mysqld.cnf     <- 새 터미널 창에 입력
 
 4. bind-address = 0.0.0.0   <- 찾아서 수정. 모든 네트워크 인터페이스(IP)에서의 접속을 허용
 
