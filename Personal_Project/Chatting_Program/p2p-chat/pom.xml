@@ -45,7 +45,8 @@
         <artifactId>javafx-maven-plugin</artifactId>
         <version>0.0.8</version>
         <configuration>
-          <mainClass>com.mycompany.chat.App</mainClass> </configuration>
+          <mainClass>com.mycompany.chat.App</mainClass>
+        </configuration>
       </plugin>
     </plugins>
   </build>
