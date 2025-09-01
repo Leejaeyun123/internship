@@ -1,2 +1,6 @@
-com/mycompany/chat/LoginController.class
+com/mycompany/chat/ChatClient.class
 com/mycompany/chat/App.class
+ClientHandler.class
+com/mycompany/chat/ChatRoomController.class
+ChatServer.class
+com/mycompany/chat/LoginController.class
