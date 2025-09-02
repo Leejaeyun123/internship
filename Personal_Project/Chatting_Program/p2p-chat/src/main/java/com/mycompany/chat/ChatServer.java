@@ -1,5 +1,7 @@
 // 여러 클라이언트의 접속을 관리하고, 메시지를 중계하며, 채팅 기록을 데이터베이스에 저장하는 핵심적인 기능을 수행
 
+package com.mycompany.chat;
+
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -63,4 +65,8 @@ public class ChatServer {
             e.printStackTrace();
         }
     }
+    public static void removeClient(ClientHandler clientHandler) {
+    clients.remove(clientHandler);
+    System.out.println("클라이언트 제거됨. 현재 접속자 수: " + clients.size());
+}
 }
