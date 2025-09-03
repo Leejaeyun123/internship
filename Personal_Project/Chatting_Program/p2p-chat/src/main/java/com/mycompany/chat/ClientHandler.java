@@ -1,4 +1,3 @@
-// 개별 클라이언트의 연결을 처리하는 스레드
 package com.mycompany.chat;
 
 import java.io.BufferedReader;
@@ -6,56 +5,63 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 
+/**
+ * 이 클래스는 각 클라이언트의 연결을 처리하는 Runnable입니다.
+ * 클라이언트로부터 메시지를 수신하고, 메시지 형식을 파싱하여 적절하게 처리합니다.
+ */
 public class ClientHandler implements Runnable {
 
-    private Socket clientSocket;
+    private final Socket clientSocket;
     private BufferedReader in;
     private PrintWriter out;
-    private String nickname; // ✅ 닉네임 변수 추가
+    private String nickname;
 
     public ClientHandler(Socket socket) {
         this.clientSocket = socket;
-        try {
-            this.in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-            this.out = new PrintWriter(clientSocket.getOutputStream(), true);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     @Override
     public void run() {
         try {
-            // ✅ 1. 클라이언트로부터 첫 번째 메시지로 닉네임을 받음
-            this.nickname = in.readLine();
-            System.out.println("사용자 접속: " + nickname);
+            // 클라이언트 소켓으로부터 입력 및 출력 스트림을 설정합니다.
+            in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+            out = new PrintWriter(clientSocket.getOutputStream(), true);
 
-            // ✅ 2. 메시지 수신 루프
+            // 클라이언트로부터 닉네임을 읽고 서버에 추가합니다.
+            this.nickname = in.readLine();
+            ChatServer.addClient(nickname, this);
+            
             String message;
+            // 클라이언트로부터 메시지를 지속적으로 읽습니다.
             while ((message = in.readLine()) != null) {
-                System.out.println("[" + nickname + "]로부터 받은 메시지: " + message);
-                ChatServer.broadcastMessage(this.nickname, message); // ✅ 닉네임을 전달
+                // "/quit" 메시지를 받으면 루프를 종료하여 클라이언트 연결을 끊습니다.
+                if (message.equals("/quit")) {
+                    break;
+                }
+                // 받은 메시지를 모든 다른 클라이언트에게 브로드캐스트합니다.
+                ChatServer.broadcastMessage(nickname, message);
             }
         } catch (IOException e) {
-            System.err.println("클라이언트 연결 오류: " + e.getMessage());
+            // 연결이 끊겼을 때 오류를 처리합니다.
+            System.err.println(nickname + "와의 연결이 끊겼습니다.");
         } finally {
+            // 클라이언트 연결이 종료되면 서버 맵에서 클라이언트를 제거하고 소켓을 닫습니다.
+            if (nickname != null) {
+                ChatServer.removeClient(nickname);
+            }
             try {
-                if (clientSocket != null) clientSocket.close();
-                // ✅ 3. 연결 종료 시 리스트에서 제거
-                ChatServer.removeClient(this);
-                System.out.println(nickname + " 클라이언트 연결 종료됨.");
+                clientSocket.close();
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
     }
 
+    /**
+     * 클라이언트에게 메시지를 보냅니다.
+     * @param message 보낼 메시지
+     */
     public void sendMessage(String message) {
         out.println(message);
     }
