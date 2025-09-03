@@ -8,7 +8,7 @@ TCP/IP 기반 P2P 채팅 프로그램
     -Maven으로 의존성 및 빌드 관리
     -javafx-sdk와 jdk 24를 수동 설치해서 사용
 
-● 개발 환경 및 사용 기술 스택 : Linux, Visual Studio Code, Java, MySQL, JDK, JavaFX SDK, BCrypt(jbcrypt), Maven, GUI 구성(JavaFX + FXML 파일)
+● 개발 환경 및 사용 기술 스택 : Linux, Visual Studio Code, Java, MySQL, JDK, JavaFX SDK, BCrypt(jbcrypt), Maven, GUI 구성(JavaFX + FXML 파일), Extension Pack for Java(자바 개발에 필요한 모든 핵심 도구들을 하나로 묶어놓은 번들)
 
 ● 프로젝트 구조
 Personal_Project/
@@ -36,8 +36,6 @@ Personal_Project/
         │   ├── p2p-chat-1.0-SNAPSHOT-client.jar  # JavaFX 클라이언트 실행 JAR
         │   └── p2p-chat-1.0-SNAPSHOT-server.jar  # 서버 실행 JAR (JavaFX 불필요)
         └── pom.xml                         # Maven 프로젝트 설정 파일
-
-● 필수 확장팩 목록 : Extension Pack for Java(자바 개발에 필요한 모든 핵심 도구들을 하나로 묶어놓은 번들)
 
 ● 필수 기능 : 
     - 접속/종료 : 사용자가 서버에 접속하고 연결을 끊는 기능
