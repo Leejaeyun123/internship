@@ -1,3 +1,4 @@
+// 로그인 화면의 UI를 제어하고, 로그인 및 회원가입 로직을 구현
 package com.mycompany.chat;
 
 import javafx.fxml.FXML;
@@ -11,18 +12,18 @@ import javafx.stage.Stage;
 import org.mindrot.jbcrypt.BCrypt;
 
 import java.io.IOException;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class LoginController {
 
-    @FXML
-    private TextField idField;
-
-    @FXML
-    private PasswordField passwordField;
-
-    @FXML
-    private Label statusLabel; // 로그인/회원가입 피드백 표시용
+    @FXML private TextField idField;
+    @FXML private TextField nicknameField; // ✅ 닉네임 입력 필드 추가
+    @FXML private PasswordField passwordField;
+    @FXML private Label statusLabel;
 
     private static final String DB_URL = "jdbc:mysql://localhost:3306/chat_app?serverTimezone=UTC";
     private static final String DB_USER = "root";
@@ -30,25 +31,26 @@ public class LoginController {
 
     @FXML
     protected void handleLogInButtonAction() {
-        String username = idField.getText();
+        String id = idField.getText();
         String password = passwordField.getText();
 
-        if (username.isEmpty() || password.isEmpty()) {
+        if (id.isEmpty() || password.isEmpty()) {
             statusLabel.setText("아이디와 비밀번호를 모두 입력하세요.");
             return;
         }
 
         try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD)) {
-            String sql = "SELECT password_hash FROM users WHERE username = ?";
+            String sql = "SELECT password_hash, nickname FROM users WHERE id = ?";
             PreparedStatement pstmt = conn.prepareStatement(sql);
-            pstmt.setString(1, username);
+            pstmt.setString(1, id);
             ResultSet rs = pstmt.executeQuery();
 
             if (rs.next()) {
                 String hashedPassword = rs.getString("password_hash");
+                String nickname = rs.getString("nickname"); // ✅ 닉네임 가져오기
                 if (BCrypt.checkpw(password, hashedPassword)) {
                     statusLabel.setText("로그인 성공!");
-                    loadChatRoom(username);
+                    loadChatRoom(id, nickname); // ✅ 아이디와 닉네임 모두 전달
                 } else {
                     statusLabel.setText("비밀번호가 일치하지 않습니다.");
                 }
@@ -63,11 +65,12 @@ public class LoginController {
 
     @FXML
     protected void handleSignUpButtonAction() {
-        String username = idField.getText();
+        String id = idField.getText();
         String password = passwordField.getText();
+        String nickname = nicknameField.getText(); // ✅ 닉네임 필드에서 값 가져오기
 
-        if (username.isEmpty() || password.isEmpty()) {
-            statusLabel.setText("아이디와 비밀번호를 모두 입력하세요.");
+        if (id.isEmpty() || password.isEmpty() || nickname.isEmpty()) {
+            statusLabel.setText("아이디, 비밀번호, 닉네임을 모두 입력하세요.");
             return;
         }
 
@@ -77,21 +80,18 @@ public class LoginController {
         }
 
         String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt());
-
         try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD)) {
-            String sql = "INSERT INTO users (username, password_hash) VALUES (?, ?)";
+            String sql = "INSERT INTO users (id, password_hash, nickname) VALUES (?, ?, ?)";
             PreparedStatement pstmt = conn.prepareStatement(sql);
-            pstmt.setString(1, username);
+            pstmt.setString(1, id);
             pstmt.setString(2, hashedPassword);
+            pstmt.setString(3, nickname); // ✅ 닉네임 저장
             pstmt.executeUpdate();
-
             statusLabel.setText("회원가입 성공! 자동 로그인 중...");
-            // 회원가입 성공 후 자동 로그인 시도
-            handleLogInButtonAction();
-
+            loadChatRoom(id, nickname); // ✅ 아이디와 닉네임으로 채팅방 로드
         } catch (SQLException e) {
             if (e.getErrorCode() == 1062) { // Duplicate entry
-                statusLabel.setText("이미 존재하는 아이디입니다.");
+                statusLabel.setText("이미 존재하는 아이디 또는 닉네임입니다.");
             } else {
                 statusLabel.setText("DB 오류: " + e.getMessage());
                 e.printStackTrace();
@@ -99,19 +99,18 @@ public class LoginController {
         }
     }
 
-    // 로그인 성공 시 채팅방 화면 로딩
-    private void loadChatRoom(String username) {
+    private void loadChatRoom(String id, String nickname) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/chat_room.fxml"));
             Parent chatRoomRoot = loader.load();
-
             ChatRoomController controller = loader.getController();
-            ChatClient client = new ChatClient("localhost", 8000, controller, username);
+
+            ChatClient client = new ChatClient("localhost", 8000, controller, nickname);
             controller.setClient(client);
 
             Stage stage = (Stage) idField.getScene().getWindow();
             stage.setScene(new Scene(chatRoomRoot));
-            stage.setTitle("채팅방 - " + username);
+            stage.setTitle("채팅방 - " + nickname);
             stage.show();
         } catch (IOException e) {
             statusLabel.setText("채팅방을 불러오는 중 오류 발생.");

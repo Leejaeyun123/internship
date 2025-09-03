@@ -1,18 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.ListView?> <HBox xmlns:fx="http://javafx.com/fxml" fx:controller="com.mycompany.chat.ChatRoomController" spacing="10" alignment="CENTER_LEFT">
 
-<VBox xmlns:fx="http://javafx.com/fxml"
-      fx:controller="com.mycompany.chat.ChatRoomController"
-      alignment="center" spacing="10">
-    <TextArea fx:id="chatArea" editable="false" VBox.vgrow="ALWAYS"/>
+    <VBox spacing="10" HBox.hgrow="ALWAYS">
+        <TextArea fx:id="chatArea" editable="false" VBox.vgrow="ALWAYS"/>
+        <HBox spacing="5" alignment="CENTER_LEFT">
+            <TextField fx:id="messageField" HBox.hgrow="ALWAYS" onAction="#sendMessage"/>
+            <Button text="Send" onAction="#sendMessage"/>
+        </HBox>
+    </VBox>
 
-    <HBox spacing="5" alignment="center">
-        <TextField fx:id="messageField" HBox.hgrow="ALWAYS" onAction="#sendMessage"/>
-        <Button text="Send" onAction="#sendMessage"/>
-    </HBox>
-</VBox>
+    <VBox spacing="5" alignment="TOP_LEFT" prefWidth="150">
+        <Label text="접속자 목록" style="-fx-font-weight: bold;"/>
+        <ListView fx:id="userList" VBox.vgrow="ALWAYS" />
+    </VBox>
+
+</HBox>

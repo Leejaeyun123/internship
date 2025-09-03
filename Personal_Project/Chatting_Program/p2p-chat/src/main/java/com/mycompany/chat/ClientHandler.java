@@ -1,3 +1,4 @@
+// 개별 클라이언트의 연결을 처리하는 스레드
 package com.mycompany.chat;
 
 import java.io.BufferedReader;
@@ -16,12 +17,7 @@ public class ClientHandler implements Runnable {
     private Socket clientSocket;
     private BufferedReader in;
     private PrintWriter out;
-    private int senderId; // DB에 저장하기 위한 발신자 ID
-    private String username;
-
-    private static final String DB_URL = "jdbc:mysql://localhost:3306/chat_app?serverTimezone=UTC";
-    private static final String DB_USER = "root";
-    private static final String DB_PASSWORD = "ljy";
+    private String nickname; // ✅ 닉네임 변수 추가
 
     public ClientHandler(Socket socket) {
         this.clientSocket = socket;
@@ -36,33 +32,24 @@ public class ClientHandler implements Runnable {
     @Override
     public void run() {
         try {
-            // ✅ 1. 클라이언트로부터 첫 번째 메시지로 username을 받음
-            this.username = in.readLine();
-            System.out.println("사용자 로그인됨: " + username);
+            // ✅ 1. 클라이언트로부터 첫 번째 메시지로 닉네임을 받음
+            this.nickname = in.readLine();
+            System.out.println("사용자 접속: " + nickname);
 
-            // ✅ 2. DB에서 senderId 조회
-            this.senderId = fetchSenderIdFromDatabase(username);
-            if (senderId == -1) {
-                out.println("서버 오류: 사용자 ID를 찾을 수 없습니다.");
-                clientSocket.close();
-                return;
-            }
-
-            // ✅ 3. 메시지 수신 루프
+            // ✅ 2. 메시지 수신 루프
             String message;
             while ((message = in.readLine()) != null) {
-                System.out.println("[" + username + "]로부터 받은 메시지: " + message);
-                ChatServer.broadcastMessage(username + ": " + message, this.senderId);
+                System.out.println("[" + nickname + "]로부터 받은 메시지: " + message);
+                ChatServer.broadcastMessage(this.nickname, message); // ✅ 닉네임을 전달
             }
-
         } catch (IOException e) {
             System.err.println("클라이언트 연결 오류: " + e.getMessage());
         } finally {
             try {
                 if (clientSocket != null) clientSocket.close();
-                // ✅ 4. 연결 종료 시 리스트에서 제거
+                // ✅ 3. 연결 종료 시 리스트에서 제거
                 ChatServer.removeClient(this);
-                System.out.println(username + " 클라이언트 연결 종료됨.");
+                System.out.println(nickname + " 클라이언트 연결 종료됨.");
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -71,21 +58,5 @@ public class ClientHandler implements Runnable {
 
     public void sendMessage(String message) {
         out.println(message);
-    }
-
-    private int fetchSenderIdFromDatabase(String username) {
-        try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD)) {
-            String sql = "SELECT id FROM users WHERE username = ?";
-            PreparedStatement pstmt = conn.prepareStatement(sql);
-            pstmt.setString(1, username);
-            ResultSet rs = pstmt.executeQuery();
-            if (rs.next()) {
-                return rs.getInt("id");
-            }
-        } catch (SQLException e) {
-            System.err.println("DB에서 senderId 조회 실패: " + e.getMessage());
-            e.printStackTrace();
-        }
-        return -1; // 실패 시
     }
 }

@@ -3,8 +3,8 @@ USE chat_app;
 
 CREATE TABLE IF NOT EXISTS users (
     id        VARCHAR(50) PRIMARY KEY,
-    password  VARCHAR(255) NOT NULL,       
-    nickname  VARCHAR(50) NOT NULL,        
+    password_hash  VARCHAR(255) NOT NULL,       
+    nickname  VARCHAR(50) NOT NULL UNIQUE,         
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
