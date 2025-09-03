@@ -82,7 +82,7 @@ IF NOT EXISTS: sensor라는 데이터베이스 또는 sensor_log라는 테이블
 
 2. USE DB 이름;     <-입력
 
-3. TRUNCATE TABLE sensor_log;   <- 입력
+3. TRUNCATE TABLE 테이블 이름;   <- 입력
 
 ● 데이터베이스 또는 테이블 삭제
 1. mysql -u root -p / mysql -u root -p -h 192.168.x.xx <- 입력
