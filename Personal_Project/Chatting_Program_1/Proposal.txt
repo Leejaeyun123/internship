@@ -1,0 +1,68 @@
+TCP/IP 기반 P2P 채팅 프로그램
+
+● 개발 목표 : TCP/IP 소켓 통신 개념을 이해하고, 이를 활용해 기본적인 메시지 전송 및 수신 기능 구현
+
+● 프로젝트 개요 : JavaFX를 기반으로 GUI를 제공하는 P2P(중앙 서버를 거치지 않고 클라이언트 컴퓨터끼리 직접 통신하는 방식) 채팅 프로그램. 서버-클라이언트 구조이며, 로그인 기능과 채팅방 UI가 포함.
+    -JavaFX로 GUI 구성
+    -MySQL을 통해 로그인 정보 및 채팅 로그를 저장
+    -Maven으로 의존성 및 빌드 관리
+    -javafx-sdk와 jdk 24를 수동 설치해서 사용
+
+● 개발 환경 및 사용 기술 스택 : Linux, Visual Studio Code, Java, MySQL, JDK, JavaFX SDK, BCrypt(jbcrypt), Maven, GUI 구성(JavaFX + FXML 파일), Extension Pack for Java(자바 개발에 필요한 모든 핵심 도구들을 하나로 묶어놓은 번들)
+
+● 프로젝트 구조
+Personal_Project/
+├── jdk-24.0.2/                          # OpenJDK 24 수동 설치 경로
+├── javafx-sdk-24.0.2/                   # JavaFX SDK 압축 해제 경로
+└── Chatting_Program/
+    └── p2p-chat/
+        ├── src/
+        │   └── main/
+        │       ├── java/
+        │       │   └── com/
+        │       │       └── mycompany/
+        │       │           └── chat/
+        │       │               ├── App.java                # 클라이언트 메인 클래스 (FXML 초기화)
+        │       │               ├── ChatClient.java         # 클라이언트 네트워크 처리
+        │       │               ├── ChatRoomController.java # 채팅방 UI 컨트롤러
+        │       │               ├── ChatServer.java         # 서버 메인 클래스
+        │       │               ├── ClientHandler.java      # 서버에서 클라이언트 개별 처리
+        │       │               └── LoginController.java    # 로그인 UI 컨트롤러
+        │       └── resources/
+        │           ├── chat_app.sql        # MySQL 초기화 스크립트
+        │           ├── chat_room.fxml      # 채팅방 UI 레이아웃
+        │           └── login.fxml          # 로그인 화면 UI 레이아웃
+        ├── target/
+        │   ├── p2p-chat-1.0-SNAPSHOT-client.jar  # JavaFX 클라이언트 실행 JAR
+        │   └── p2p-chat-1.0-SNAPSHOT-server.jar  # 서버 실행 JAR (JavaFX 불필요)
+        └── pom.xml                         # Maven 프로젝트 설정 파일
+
+● 필수 기능 : 
+    - 접속/종료 : 사용자가 서버에 접속하고 연결을 끊는 기능
+    - 메시지 전송 : 사용자가 채팅 메시지를 입력하고 전송하는 기능
+    - 메시지 수신 : 서버로부터 다른 사용자의 메시지를 받아 화면에 표시하는 기능
+
+   고급 기능 : 
+    - 멀티 유저 지원 : 여러 사용자가 동시에 접속하여 채팅할 수 있도록 구현
+    - 개인 메시지(귓속말) : 특정 사용자에게만 메시지를 보내는 기능
+    - 파일 전송 : 텍스트 외에 이미지나 파일을 주고받는 기능
+    - 사용자 목록 : 현재 접속 중인 사용자를 보여주는 기능
+    - 채팅방 생성/관리 : 여러 개의 채팅방을 만들고 관리하는 기능
+
+● 개발 과정 : 
+
+    1. 프로젝트 환경 설정 및 기본 UI 구성
+    - VS Code에서 Java 프로젝트 생성 : 빌드 도구로 Maven 사용
+    - UI 라이브러리 선택 및 기본 화면 구성 : 로그인 화면 구성 도구로 JavaFX 사용하여 ID와 비밀번호를 입력할 수 있는 TextField와 PasswordField, 그리고 로그인 및 회원가입 버튼 배치
+
+    2. MySQL 데이터베이스 연동
+    - MySQL 설치 및 테이블 생성 : 사용자 정보를 저장할 테이블을 생성. 비밀번호는 보안을 위해 **해시 함수**를 이용해 암호화하여 저장
+    - JDBC 드라이버 추가 : Java에서 MySQL 데이터베이스에 접속하려면 JDBC 드라이버 필요
+
+    3. 로그인 및 회원가입 로직 구현
+    - 회원가입 기능 : 사용자가 회원가입 버튼을 누르면, 입력된 ID와 비밀번호를 가져옴
+    - 로그인 기능 : 사용자가 로그인 버튼을 누르면, 입력된 ID를 이용해 데이터베이스에서 암호화된 비밀번호를 가져옴
+
+    4. 채팅방 및 채팅 기록 저장 기능 구현
+    - 채팅방 UI 및 소켓 통신 구현 : 로그인 성공 시, 채팅 메시지를 표시할 창과 메시지 입력 필드, 전송 버튼이 있는 채팅방 화면을 띄움. java.net.Socket을 이용해 TCP/IP 소켓 통신을 구현
+    - 채팅 기록 저장 : 클라이언트가 메시지를 전송하면, 서버는 먼저 메시지를 chat_logs 테이블에 저장한 후, 다른 모든 클라이언트에게 해당 메시지를 보냄

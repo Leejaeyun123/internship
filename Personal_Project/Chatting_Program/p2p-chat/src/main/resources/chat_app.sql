@@ -2,16 +2,17 @@ CREATE DATABASE IF NOT EXISTS chat_app;
 USE chat_app;
 
 CREATE TABLE IF NOT EXISTS users (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    username VARCHAR(255) NOT NULL UNIQUE,
-    password_hash VARCHAR(255) NOT NULL,
+    id        VARCHAR(50) PRIMARY KEY,
+    password  VARCHAR(255) NOT NULL,       
+    nickname  VARCHAR(50) NOT NULL,        
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE IF NOT EXISTS chat_logs (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    sender_id INT NOT NULL,
-    message TEXT NOT NULL,
-    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (sender_id) REFERENCES users(id)
+    id        VARCHAR(50) NOT NULL,                  
+    nickname  VARCHAR(50) NOT NULL,                   
+    message   TEXT NOT NULL,                          
+    timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,     
+    PRIMARY KEY (id, timestamp)
 );
+

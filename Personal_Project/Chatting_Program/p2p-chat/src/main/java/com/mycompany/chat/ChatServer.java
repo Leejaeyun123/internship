@@ -53,12 +53,13 @@ public class ChatServer {
     }
     
     // 데이터베이스에 메시지 저장
-    private static void saveMessageToDb(int senderId, String message) {
+    private static void saveMessageToDb(String senderId, String nickname, String message) {
         try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD)) {
-            String sql = "INSERT INTO chat_logs (sender_id, message) VALUES (?, ?)";
+            String sql = "INSERT INTO chat_logs (id, nickname, message) VALUES (?, ?, ?)";
             PreparedStatement pstmt = conn.prepareStatement(sql);
-            pstmt.setInt(1, senderId);
-            pstmt.setString(2, message);
+            pstmt.setString(1, senderId);
+            pstmt.setString(2, nickname);   
+            pstmt.setString(3, message);
             pstmt.executeUpdate();
             System.out.println("메시지가 데이터베이스에 저장되었습니다.");
         } catch (SQLException e) {
