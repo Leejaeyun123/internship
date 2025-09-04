@@ -21,7 +21,7 @@ import java.sql.SQLException;
 public class LoginController {
 
     @FXML private TextField idField;
-    @FXML private TextField nicknameField; // ✅ 닉네임 입력 필드 추가
+    @FXML private TextField nicknameField;
     @FXML private PasswordField passwordField;
     @FXML private Label statusLabel;
 
@@ -30,7 +30,7 @@ public class LoginController {
     private static final String DB_PASSWORD = "ljy";
 
     @FXML
-    protected void handleLogInButtonAction() {
+    protected void handleLogIn() {
         String id = idField.getText();
         String password = passwordField.getText();
 
@@ -47,10 +47,10 @@ public class LoginController {
 
             if (rs.next()) {
                 String hashedPassword = rs.getString("password_hash");
-                String nickname = rs.getString("nickname"); // ✅ 닉네임 가져오기
+                String nickname = rs.getString("nickname");
                 if (BCrypt.checkpw(password, hashedPassword)) {
                     statusLabel.setText("로그인 성공!");
-                    loadChatRoom(id, nickname); // ✅ 아이디와 닉네임 모두 전달
+                    loadChatRoom(id, nickname);
                 } else {
                     statusLabel.setText("비밀번호가 일치하지 않습니다.");
                 }
@@ -64,10 +64,10 @@ public class LoginController {
     }
 
     @FXML
-    protected void handleSignUpButtonAction() {
+    protected void handleSignUp() {
         String id = idField.getText();
         String password = passwordField.getText();
-        String nickname = nicknameField.getText(); // ✅ 닉네임 필드에서 값 가져오기
+        String nickname = nicknameField.getText();
 
         if (id.isEmpty() || password.isEmpty() || nickname.isEmpty()) {
             statusLabel.setText("아이디, 비밀번호, 닉네임을 모두 입력하세요.");
@@ -85,12 +85,12 @@ public class LoginController {
             PreparedStatement pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, id);
             pstmt.setString(2, hashedPassword);
-            pstmt.setString(3, nickname); // ✅ 닉네임 저장
+            pstmt.setString(3, nickname);
             pstmt.executeUpdate();
             statusLabel.setText("회원가입 성공! 자동 로그인 중...");
-            loadChatRoom(id, nickname); // ✅ 아이디와 닉네임으로 채팅방 로드
+            loadChatRoom(id, nickname);
         } catch (SQLException e) {
-            if (e.getErrorCode() == 1062) { // Duplicate entry
+            if (e.getErrorCode() == 1062) {
                 statusLabel.setText("이미 존재하는 아이디 또는 닉네임입니다.");
             } else {
                 statusLabel.setText("DB 오류: " + e.getMessage());
