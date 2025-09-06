@@ -33,7 +33,13 @@ public class LoginController {
     @FXML
     protected void handleSignUpView() {
         try {
+<<<<<<< HEAD
             Parent signUpRoot = FXMLLoader.load(getClass().getResource("/signup.fxml"));
+=======
+            // FXML 파일 경로 수정
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/signup.fxml"));
+            Parent signUpRoot = fxmlLoader.load();
+>>>>>>> 37db516 (09-07)
             Stage stage = (Stage) idField.getScene().getWindow();
             stage.setScene(new Scene(signUpRoot));
             stage.setTitle("회원가입");
@@ -47,7 +53,13 @@ public class LoginController {
     @FXML
     protected void handleLogInView() {
         try {
+<<<<<<< HEAD
             Parent logInRoot = FXMLLoader.load(getClass().getResource("/login.fxml"));
+=======
+            // FXML 파일 경로 수정
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/login.fxml"));
+            Parent logInRoot = fxmlLoader.load();
+>>>>>>> 37db516 (09-07)
             Stage stage = (Stage) statusLabel.getScene().getWindow();
             stage.setScene(new Scene(logInRoot));
             stage.setTitle("로그인");
