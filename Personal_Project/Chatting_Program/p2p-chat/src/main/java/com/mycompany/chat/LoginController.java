@@ -29,6 +29,34 @@ public class LoginController {
     private static final String DB_USER = "root";
     private static final String DB_PASSWORD = "ljy";
 
+    // 회원가입 화면으로 전환하는 메서드
+    @FXML
+    protected void handleSignUpView() {
+        try {
+            Parent signUpRoot = FXMLLoader.load(getClass().getResource("/signup.fxml"));
+            Stage stage = (Stage) idField.getScene().getWindow();
+            stage.setScene(new Scene(signUpRoot));
+            stage.setTitle("회원가입");
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    // 로그인 화면으로 전환하는 메서드
+    @FXML
+    protected void handleLogInView() {
+        try {
+            Parent logInRoot = FXMLLoader.load(getClass().getResource("/login.fxml"));
+            Stage stage = (Stage) statusLabel.getScene().getWindow();
+            stage.setScene(new Scene(logInRoot));
+            stage.setTitle("로그인");
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     @FXML
     protected void handleLogIn() {
         String id = idField.getText();
@@ -49,7 +77,7 @@ public class LoginController {
                 String hashedPassword = rs.getString("password_hash");
                 String nickname = rs.getString("nickname");
                 if (BCrypt.checkpw(password, hashedPassword)) {
-                    statusLabel.setText("로그인 성공!");
+                    statusLabel.setText("로그인 성공! 자동 로그인 중...");
                     loadChatRoom(id, nickname);
                 } else {
                     statusLabel.setText("비밀번호가 일치하지 않습니다.");

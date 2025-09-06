@@ -10,7 +10,7 @@
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
     </padding>
 
-    <Label text="로그인" textFill="#2e2e2e">
+    <Label text="회원가입" textFill="#2e2e2e">
         <font>
             <Font name="System Bold" size="24.0" />
         </font>
@@ -22,12 +22,16 @@
             <TextField fx:id="idField" promptText="아이디를 입력하세요" />
         </HBox>
         <HBox alignment="CENTER_LEFT" spacing="10.0">
+            <Label minWidth="80.0" text="별명:" />
+            <TextField fx:id="nicknameField" promptText="채팅에서 사용할 별명 입력" />
+        </HBox>
+        <HBox alignment="CENTER_LEFT" spacing="10.0">
             <Label minWidth="80.0" text="비밀번호:" />
             <PasswordField fx:id="passwordField" promptText="비밀번호를 입력하세요" />
         </HBox>
     </VBox>
 
-    <Button onAction="#handleLogIn" prefWidth="150.0" style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 5;" text="로그인" />
+    <Button onAction="#handleSignUp" prefWidth="150.0" style="-fx-background-color: #2196F3; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 5;" text="회원가입" />
 
     <Label fx:id="statusLabel" alignment="CENTER" prefWidth="300.0" textFill="#e53935" wrapText="true">
         <font>
@@ -36,7 +40,7 @@
     </Label>
 
     <VBox alignment="CENTER" spacing="5.0">
-        <Label text="계정이 없으신가요?" />
-        <Button onAction="#handleSignUpView" prefWidth="150.0" style="-fx-background-color: #2196F3; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 5;" text="회원가입" />
+        <Label text="이미 계정이 있으신가요?" />
+        <Button onAction="#handleLogInView" prefWidth="150.0" style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 5;" text="로그인" />
     </VBox>
 </VBox>

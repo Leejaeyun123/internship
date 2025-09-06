@@ -14,7 +14,8 @@ public class App extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        scene = new Scene(loadFXML("login"));
+        // Scene의 너비와 높이를 명시적으로 지정하여 초기 창 크기를 고정합니다.
+        scene = new Scene(loadFXML("login"), 400, 400); 
         stage.setTitle("로그인");
         stage.setScene(scene);
         stage.show();
@@ -25,9 +26,8 @@ public class App extends Application {
     }
 
     private static Parent loadFXML(String fxml) throws IOException {
+        // FXML 파일을 클래스패스 루트에서 찾도록 경로를 수정했습니다.
         FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("/" + fxml + ".fxml"));
-        // FXML 로더에게 컨트롤러 인스턴스를 직접 지정
-        fxmlLoader.setController(new LoginController());
         return fxmlLoader.load();
     }
 
