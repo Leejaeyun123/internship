@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.Insets?>
+
+<BorderPane xmlns="http://javafx.com/javafx/17"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.mycompany.chat.ChatTabController">
+
+    <top>
+        <HBox spacing="10">
+            <padding>
+                <Insets top="10" right="10" bottom="10" left="10"/>
+            </padding>
+            <Label text="방:"/>
+            <Label fx:id="roomLabel" style="-fx-font-weight: bold;"/>
+            <Pane HBox.hgrow="ALWAYS"/>
+            <Label text="참가자"/>
+        </HBox>
+    </top>
+
+    <center>
+        <SplitPane>
+            <VBox spacing="6" prefWidth="500" SplitPane.resizableWithParent="true">
+                <TextArea fx:id="chatArea" editable="false" wrapText="true" VBox.vgrow="ALWAYS"/>
+                <HBox spacing="6">
+                    <TextField fx:id="messageField" HBox.hgrow="ALWAYS" onAction="#sendMessage" promptText="메시지 입력"/>
+                    <Button text="Send" onAction="#sendMessage"/>
+                </HBox>
+            </VBox>
+            <ListView fx:id="userList" prefWidth="180"/>
+        </SplitPane>
+    </center>
+</BorderPane>

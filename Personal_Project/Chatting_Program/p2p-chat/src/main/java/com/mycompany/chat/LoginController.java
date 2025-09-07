@@ -7,20 +7,18 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.stage.Stage;
 import org.mindrot.jbcrypt.BCrypt;
 
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 
 public class LoginController {
 
     @FXML private TextField idField;
-    @FXML private TextField nicknameField;
+    @FXML private TextField nicknameField;   // 회원가입 화면에서만 존재(로그인 화면에서는 null일 수 있음)
     @FXML private PasswordField passwordField;
     @FXML private Label statusLabel;
 
@@ -28,7 +26,8 @@ public class LoginController {
     private static final String DB_USER = "root";
     private static final String DB_PASSWORD = "ljy";
 
-    // 회원가입 화면으로 전환
+    /* ===================== 화면 전환 ===================== */
+
     @FXML
     protected void handleSignUpView() {
         try {
@@ -44,7 +43,6 @@ public class LoginController {
         }
     }
 
-    // 로그인 화면으로 전환
     @FXML
     protected void handleLogInView() {
         try {
@@ -60,10 +58,11 @@ public class LoginController {
         }
     }
 
-    // 로그인 처리
+    /* ===================== 로그인/회원가입 ===================== */
+
     @FXML
     protected void handleLogIn() {
-        String id = idField.getText().trim();
+        String id = safeTrim(idField.getText());
         String password = passwordField.getText();
 
         if (id.isEmpty() || password.isEmpty()) {
@@ -71,8 +70,9 @@ public class LoginController {
             return;
         }
 
+        String sql = "SELECT password_hash, nickname FROM users WHERE id = ?";
         try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
-             PreparedStatement pstmt = conn.prepareStatement("SELECT password_hash, nickname FROM users WHERE id = ?")) {
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setString(1, id);
             try (ResultSet rs = pstmt.executeQuery()) {
@@ -81,7 +81,7 @@ public class LoginController {
                     String nickname = rs.getString("nickname");
                     if (BCrypt.checkpw(password, hashedPassword)) {
                         statusLabel.setText("로그인 성공! 자동 로그인 중...");
-                        loadChatRoom(id, nickname);
+                        loadChatRoom(id, nickname);  // 멀티탭 메인으로 진입
                     } else {
                         statusLabel.setText("비밀번호가 일치하지 않습니다.");
                     }
@@ -89,35 +89,32 @@ public class LoginController {
                     statusLabel.setText("존재하지 않는 사용자입니다.");
                 }
             }
-
         } catch (SQLException e) {
             e.printStackTrace();
             statusLabel.setText("데이터베이스 오류가 발생했습니다.");
         }
     }
 
-    // 회원가입 처리
     @FXML
     protected void handleSignUp() {
-        String id = idField.getText().trim();
+        String id = safeTrim(idField.getText());
         String password = passwordField.getText();
-        String nickname = nicknameField.getText().trim();
+        String nickname = safeTrim(nicknameField != null ? nicknameField.getText() : null);
 
         if (id.isEmpty() || password.isEmpty() || nickname.isEmpty()) {
             statusLabel.setText("아이디, 비밀번호, 닉네임을 모두 입력하세요.");
             return;
         }
-
         if (password.length() < 4) {
             statusLabel.setText("비밀번호는 최소 4자리 이상이어야 합니다.");
             return;
         }
 
         String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt());
+        String sql = "INSERT INTO users (id, password_hash, nickname) VALUES (?, ?, ?)";
 
         try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
-             PreparedStatement pstmt = conn.prepareStatement(
-                     "INSERT INTO users (id, password_hash, nickname) VALUES (?, ?, ?)")) {
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setString(1, id);
             pstmt.setString(2, hashedPassword);
@@ -128,7 +125,7 @@ public class LoginController {
             loadChatRoom(id, nickname);
 
         } catch (SQLException e) {
-            if (e.getErrorCode() == 1062) { // Duplicate entry (MySQL error code)
+            if (e.getErrorCode() == 1062) { // 중복 키
                 statusLabel.setText("이미 존재하는 아이디 또는 닉네임입니다.");
             } else {
                 e.printStackTrace();
@@ -137,23 +134,54 @@ public class LoginController {
         }
     }
 
-    // 채팅방 화면 로드
+    /* ===================== 채팅 메인(멀티탭) 로드 ===================== */
+
     private void loadChatRoom(String id, String nickname) {
+        Parent root;
+        ChatMainController controller;
+
+        // 1) FXML 로드 (화면 구성 오류와 서버 연결 오류를 분리)
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/chat_room.fxml"));
-            Parent chatRoomRoot = loader.load();
-            ChatRoomController controller = loader.getController();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/chat_main.fxml"));
+            root = loader.load();
+            controller = loader.getController();
+        } catch (Exception e) {
+            e.printStackTrace();
+            statusLabel.setText("화면 로드 실패: " + e.getClass().getSimpleName() + " - " + String.valueOf(e.getMessage()));
+            return;
+        }
 
+        // 2) 화면 먼저 보여주고
+        Stage stage = (Stage) idField.getScene().getWindow();
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
+        stage.setTitle("채팅 - " + nickname);
+
+        // 창 크기/최소 사이즈(버튼 줄임표 방지)
+        stage.setMinWidth(900);
+        stage.setMinHeight(560);
+        stage.setWidth(1000);
+        stage.setHeight(640);
+        stage.centerOnScreen();
+
+        stage.show();
+
+        // 3) 그 다음 서버 연결(연결 실패해도 화면은 뜸)
+        try {
             ChatClient client = new ChatClient("localhost", 8000, controller, nickname);
-            controller.setClient(client);
-
-            Stage stage = (Stage) idField.getScene().getWindow();
-            stage.setScene(new Scene(chatRoomRoot));
-            stage.setTitle("채팅방 - " + nickname);
-            stage.show();
+            controller.init(nickname, client);
         } catch (IOException e) {
             e.printStackTrace();
-            statusLabel.setText("채팅방을 불러오는 중 오류가 발생했습니다.");
+            new Alert(Alert.AlertType.ERROR,
+                    "서버 연결 실패: " + e.getMessage(),
+                    ButtonType.OK).show();
+            // 필요하면 여기서 controller 쪽에 "오프라인 상태" 표시 메서드 호출 가능
         }
+    }
+
+    /* ===================== 유틸 ===================== */
+
+    private static String safeTrim(String s) {
+        return s == null ? "" : s.trim();
     }
 }
