@@ -12,19 +12,33 @@
       fx:controller="com.mycompany.chat.ChatRoomController"
       spacing="10" alignment="CENTER_LEFT">
 
+    <!-- 채팅 영역 -->
     <VBox spacing="10" HBox.hgrow="ALWAYS">
-        <TextArea fx:id="chatArea" editable="false" VBox.vgrow="ALWAYS"/>
+        <TextArea fx:id="chatArea" editable="false" wrapText="true" VBox.vgrow="ALWAYS"/>
         <HBox spacing="5" alignment="CENTER_LEFT">
             <TextField fx:id="messageField" HBox.hgrow="ALWAYS" onAction="#sendMessage"/>
             <Button text="Send" onAction="#sendMessage"/>
         </HBox>
     </VBox>
 
-    <VBox spacing="8" alignment="TOP_LEFT" prefWidth="180">
+    <!-- 우측 패널: 방/상태/유저 목록 -->
+    <VBox spacing="8" alignment="TOP_LEFT" prefWidth="200">
+
+        <!-- 채팅방 선택/생성 -->
+        <Label text="채팅방" style="-fx-font-weight: bold;"/>
+        <ComboBox fx:id="roomCombo" promptText="방 선택"/>
+        <HBox spacing="5" alignment="CENTER_LEFT">
+            <TextField fx:id="newRoomField" promptText="새 방 이름" HBox.hgrow="ALWAYS"/>
+            <Button text="+" onAction="#createRoom"/>
+        </HBox>
+
+        <!-- 상태 선택 -->
         <HBox spacing="6" alignment="CENTER_LEFT">
             <Label text="상태" style="-fx-font-weight: bold;"/>
-            <ComboBox fx:id="statusCombo" onAction="#changeStatus" prefWidth="110"/>
+            <ComboBox fx:id="statusCombo" onAction="#changeStatus" prefWidth="120"/>
         </HBox>
+
+        <!-- 유저 목록 -->
         <Label fx:id="userLabel" text="접속자 목록" style="-fx-font-weight: bold;"/>
         <ListView fx:id="userList" VBox.vgrow="ALWAYS"/>
     </VBox>

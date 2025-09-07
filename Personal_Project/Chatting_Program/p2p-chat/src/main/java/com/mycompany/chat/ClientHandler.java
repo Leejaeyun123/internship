@@ -30,12 +30,23 @@ public class ClientHandler implements Runnable {
             while ((message = in.readLine()) != null) {
                 if ("/quit".equals(message)) break;
 
-                // ★ 메시지 처리에서 발생하는 모든 예외를 잡아 연결 유지
                 try {
                     if (message.startsWith("status:")) {
-                        String status = message.substring("status:".length()).trim();
-                        ChatServer.updateStatus(nickname, status);
+                        ChatServer.updateStatus(nickname, message.substring("status:".length()).trim());
+                    } else if (message.startsWith("room:create:")) {
+                        String room = message.substring("room:create:".length()).trim();
+                        if (!room.isEmpty()) {
+                            ChatServer.createRoom(room);
+                            ChatServer.joinRoom(nickname, room);
+                        }
+                    } else if (message.startsWith("room:join:")) {
+                        String room = message.substring("room:join:".length()).trim();
+                        if (!room.isEmpty()) ChatServer.joinRoom(nickname, room);
+                    } else if (message.equals("room:list")) {
+                        // 내게만 방 목록 보내기 (ChatServer의 공개 메서드 사용)
+                        out.println(ChatServer.getRoomListPayload());
                     } else {
+                        // 일반 채팅
                         ChatServer.broadcastMessage(nickname, message);
                     }
                 } catch (Exception ex) {
@@ -46,9 +57,7 @@ public class ClientHandler implements Runnable {
         } catch (IOException e) {
             System.err.println(nickname + "와의 연결이 끊겼습니다.");
         } finally {
-            if (nickname != null) {
-                ChatServer.removeClient(nickname);
-            }
+            if (nickname != null) ChatServer.removeClient(nickname);
             try { clientSocket.close(); } catch (IOException ignore) {}
         }
     }
