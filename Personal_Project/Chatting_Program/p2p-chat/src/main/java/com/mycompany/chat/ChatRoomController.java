@@ -7,7 +7,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Label;
-import java.io.IOException;
+import javafx.scene.control.ComboBox;
 
 public class ChatRoomController {
 
@@ -15,6 +15,7 @@ public class ChatRoomController {
     @FXML private TextField messageField;
     @FXML private ListView<String> userList;
     @FXML private Label userLabel;
+    @FXML private ComboBox<String> statusCombo;
 
     private ChatClient client;
     private ObservableList<String> usersObservableList;
@@ -23,6 +24,12 @@ public class ChatRoomController {
     public void initialize() {
         usersObservableList = FXCollections.observableArrayList();
         userList.setItems(usersObservableList);
+
+        // 상태 옵션 세팅
+        if (statusCombo != null) {
+            statusCombo.setItems(FXCollections.observableArrayList("활동 중", "자리 비움"));
+            statusCombo.getSelectionModel().select("활동 중"); // 기본값
+        }
     }
 
     public void displayMessage(String message) {
@@ -39,9 +46,13 @@ public class ChatRoomController {
 
     private void updateUserList(String userListString) {
         usersObservableList.clear();
-        String[] users = userListString.split(",");
-        for (String user : users) {
-            usersObservableList.add(user);
+        if (userListString.isBlank()) return;
+        String[] entries = userListString.split(",");
+        for (String entry : entries) {
+            String[] parts = entry.split("\\|", 2); // "닉네임|상태"
+            String nick = parts[0];
+            String status = (parts.length > 1 && !parts[1].isBlank()) ? parts[1] : "활동 중";
+            usersObservableList.add(nick + " (" + status + ")");
         }
     }
 
@@ -54,7 +65,19 @@ public class ChatRoomController {
         }
     }
 
+    // 콤보박스에서 상태 변경 시 호출
+    @FXML
+    private void changeStatus() {
+        if (client == null || statusCombo == null) return;
+        String status = statusCombo.getValue();
+        if (status != null && !status.isBlank()) {
+            client.sendStatus(status);
+        }
+    }
+
     public void setClient(ChatClient client) {
         this.client = client;
+        // 초기 상태도 서버에 알려주고 싶으면 주석 해제
+        // if (statusCombo != null) client.sendStatus(statusCombo.getValue());
     }
 }
