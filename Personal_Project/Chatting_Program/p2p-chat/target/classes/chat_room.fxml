@@ -1,44 +1,69 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
+<!-- Label 컨트롤 임포트 -->
 <?import javafx.scene.control.Label?>
+<!-- ListView 컨트롤 임포트 -->
 <?import javafx.scene.control.ListView?>
+<!-- TextArea 컨트롤 임포트 -->
 <?import javafx.scene.control.TextArea?>
+<!-- TextField 컨트롤 임포트 -->
 <?import javafx.scene.control.TextField?>
+<!-- Button 컨트롤 임포트 -->
 <?import javafx.scene.control.Button?>
+<!-- ComboBox 컨트롤 임포트 -->
 <?import javafx.scene.control.ComboBox?>
+<!-- 수평 레이아웃 컨테이너 HBox 임포트 -->
 <?import javafx.scene.layout.HBox?>
+<!-- 수직 레이아웃 컨테이너 VBox 임포트 -->
 <?import javafx.scene.layout.VBox?>
 
+<!-- 루트 컨테이너: 수평 배치, 자식 간격 10px, 좌측 정렬 -->
 <HBox xmlns:fx="http://javafx.com/fxml"
       fx:controller="com.mycompany.chat.ChatRoomController"
-      spacing="10" alignment="CENTER_LEFT">
+      spacing="10"
+      alignment="CENTER_LEFT">
 
-    <!-- 채팅 영역 -->
+    <!-- ===== 왼쪽: 채팅 영역 ===== -->
+    <!-- 세로 배치, 간격 10px, 가로로는 최대 확장 -->
     <VBox spacing="10" HBox.hgrow="ALWAYS">
-        <TextArea fx:id="chatArea" editable="false" wrapText="true" VBox.vgrow="ALWAYS"/>
+        <!-- 채팅 로그: 읽기전용, 자동 줄바꿈, 세로로 남는 공간 모두 사용 -->
+        <TextArea fx:id="chatArea"
+                  editable="false"
+                  wrapText="true"
+                  VBox.vgrow="ALWAYS"/>
+        <!-- 입력줄: 텍스트필드 + 전송 버튼 -->
         <HBox spacing="5" alignment="CENTER_LEFT">
-            <TextField fx:id="messageField" HBox.hgrow="ALWAYS" onAction="#sendMessage"/>
-            <Button text="Send" onAction="#sendMessage"/>
+            <!-- 메시지 입력: 엔터 시 sendMessage 호출, 가로로 최대 확장 -->
+            <TextField fx:id="messageField"
+                       HBox.hgrow="ALWAYS"
+                       onAction="#sendMessage"/>
+            <!-- 전송 버튼: 클릭 시 sendMessage 호출 -->
+            <Button text="Send"
+                    onAction="#sendMessage"/>
         </HBox>
     </VBox>
 
-    <!-- 우측 패널: 방/상태/유저 목록 -->
+    <!-- ===== 오른쪽: 방/상태/유저 목록 패널 ===== -->
+    <!-- 세로 배치, 간격 8px, 좌상단 정렬, 폭 200px -->
     <VBox spacing="8" alignment="TOP_LEFT" prefWidth="200">
 
-        <!-- 채팅방 선택/생성 -->
+        <!-- 채팅방 섹션 -->
         <Label text="채팅방" style="-fx-font-weight: bold;"/>
+        <!-- 방 선택 콤보박스 -->
         <ComboBox fx:id="roomCombo" promptText="방 선택"/>
+        <!-- 새 방 생성: 입력 + +버튼 -->
         <HBox spacing="5" alignment="CENTER_LEFT">
             <TextField fx:id="newRoomField" promptText="새 방 이름" HBox.hgrow="ALWAYS"/>
             <Button text="+" onAction="#createRoom"/>
         </HBox>
 
-        <!-- 상태 선택 -->
+        <!-- 상태 섹션 -->
         <HBox spacing="6" alignment="CENTER_LEFT">
             <Label text="상태" style="-fx-font-weight: bold;"/>
             <ComboBox fx:id="statusCombo" onAction="#changeStatus" prefWidth="120"/>
         </HBox>
 
-        <!-- 유저 목록 -->
+        <!-- 유저 목록 섹션 -->
         <Label fx:id="userLabel" text="접속자 목록" style="-fx-font-weight: bold;"/>
         <ListView fx:id="userList" VBox.vgrow="ALWAYS"/>
     </VBox>

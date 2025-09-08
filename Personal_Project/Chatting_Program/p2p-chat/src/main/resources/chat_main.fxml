@@ -1,55 +1,112 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- XML 문서 선언: UTF-8 인코딩을 사용하는 FXML 문서임을 알림 -->
+
 <?import javafx.geometry.Insets?>
+<!-- FXML에서 <Insets> 태그를 직접 사용할 수 있도록 Insets 클래스를 import -->
+
 <?import javafx.scene.control.*?>
+<!-- Button, Label, ListView, TextArea, TextField, ComboBox 등 모든 컨트롤 패키지를 와일드카드로 import -->
+
 <?import javafx.scene.layout.*?>
+<!-- BorderPane, HBox, VBox, Pane 등 레이아웃 컨테이너들을 와일드카드로 import -->
 
 <BorderPane fx:controller="com.mycompany.chat.ChatMainController"
             prefWidth="960.0" prefHeight="600.0"
             xmlns="http://javafx.com/javafx/24.0.2"
             xmlns:fx="http://javafx.com/fxml/1">
+<!-- 화면의 루트 컨테이너로 BorderPane 사용
+     - fx:controller: 이 FXML과 연결될 컨트롤러 클래스 (ChatMainController)
+     - prefWidth/Height: 초기 선호 크기
+     - xmlns / xmlns:fx: JavaFX/FXML 네임스페이스 선언 -->
 
     <!-- 상단 바 -->
     <top>
+        <!-- BorderPane의 top 영역: 상단 툴바/정보 표시 -->
         <HBox spacing="15.0">
+            <!-- 수평 박스 레이아웃, 자식 간 간격 15px -->
             <padding><Insets topRightBottomLeft="10.0"/></padding>
+            <!-- HBox 내부 여백(패딩) 10px (상/우/하/좌 동일) -->
             <children>
+                <!-- HBox의 자식 노드 목록 시작 -->
                 <Label text="상태:"/>
+                <!-- '상태:' 라벨 -->
                 <ComboBox fx:id="statusCombo" prefWidth="140.0" onAction="#changeStatusAction"/>
-                <Pane HBox.hgrow="ALWAYS"/> <!-- spacer -->
+                <!-- 상태 선택 콤보박스
+                     - fx:id: 컨트롤러에서 참조할 ID
+                     - prefWidth: 폭 140
+                     - onAction: 사용자가 선택 변경 시 컨트롤러의 changeStatusAction 호출 -->
+
+                <Pane HBox.hgrow="ALWAYS"/>
+                <!-- 가변 스페이서: 왼쪽/오른쪽 그룹을 벌려서 오른쪽 항목들을 끝으로 밀어냄 -->
+
                 <Label text="내 별명:"/>
+                <!-- '내 별명:' 라벨 -->
                 <Label fx:id="myNickLabel" text="-" />
+                <!-- 현재 로그인한 닉네임 표시 라벨 (초기값 '-') -->
             </children>
         </HBox>
     </top>
 
     <!-- 좌측: 방 목록 + 전체 접속자 -->
     <left>
+        <!-- BorderPane의 left 영역: 방 목록/생성, 전체 접속자 리스트 -->
         <VBox spacing="10.0" prefWidth="270.0">
+            <!-- 세로 박스, 항목 간격 10px, 폭 270px -->
             <padding><Insets topRightBottomLeft="10.0"/></padding>
+            <!-- VBox 내부 여백 10px -->
             <children>
+                <!-- 좌측 패널의 자식들 -->
                 <Label text="채팅방 목록"/>
+                <!-- '채팅방 목록' 섹션 제목 -->
+
                 <ListView fx:id="roomListView" prefHeight="300.0"/>
+                <!-- 방 목록을 표시하는 리스트뷰
+                     - fx:id로 컨트롤러에서 데이터 바인딩/이벤트 연결
+                     - 선호 높이 300px -->
 
                 <HBox spacing="8.0">
+                    <!-- 새 방 만들기 입력 + 버튼을 가로로 배치 -->
                     <TextField fx:id="newRoomField" promptText="새 방이름" HBox.hgrow="ALWAYS"/>
+                    <!-- 새 방 이름 입력 필드
+                         - promptText: 힌트 텍스트
+                         - HBox.hgrow=ALWAYS: 가로 공간을 가능한 한 많이 차지 -->
+
                     <Button text="만들기" onAction="#createRoomAction"/>
+                    <!-- '만들기' 버튼: 클릭 시 컨트롤러의 createRoomAction 호출 -->
                 </HBox>
 
                 <Label fx:id="allUsersTitle" text="전체 접속자 (0명)"/>
+                <!-- 전체 접속자 섹션 제목 (인원 수 동적 갱신용 fx:id 바인딩) -->
+
                 <ListView fx:id="allUsersListView" prefHeight="220.0"/>
+                <!-- 서버 전체 접속자 목록 표시용 리스트뷰 (상태 포함) -->
             </children>
         </VBox>
     </left>
 
     <!-- 중앙: 대화 + 입력 -->
     <center>
+        <!-- BorderPane의 center 영역: 채팅 로그 + 입력창 -->
         <VBox spacing="8.0">
+            <!-- 세로 배치, 간격 8px -->
             <padding><Insets topRightBottomLeft="10.0"/></padding>
+            <!-- 내부 여백 10px -->
             <children>
                 <TextArea fx:id="chatArea" editable="false" wrapText="true" VBox.vgrow="ALWAYS"/>
+                <!-- 채팅 로그 표시 텍스트 영역
+                     - editable=false: 사용자가 직접 편집 불가
+                     - wrapText=true: 줄바꿈 자동
+                     - VBox.vgrow=ALWAYS: 남는 세로 공간을 우선적으로 차지(로그를 크게 표시) -->
+
                 <HBox spacing="8.0">
+                    <!-- 입력줄(텍스트필드 + 보내기 버튼) 가로 배치 -->
                     <TextField fx:id="messageField" promptText="메시지 입력" HBox.hgrow="ALWAYS"/>
+                    <!-- 채팅 입력 필드
+                         - promptText: 힌트 표시
+                         - HBox.hgrow=ALWAYS: 가능한 가로공간 확보 -->
+
                     <Button fx:id="sendBtn" text="Send" onAction="#sendMessageAction"/>
+                    <!-- 보내기 버튼: 클릭 시 컨트롤러의 sendMessageAction 호출 -->
                 </HBox>
             </children>
         </VBox>
@@ -57,16 +114,31 @@
 
     <!-- 우측: 현재(활성) 방 참가자 -->
     <right>
+        <!-- BorderPane의 right 영역: 현재 활성 방의 사용자 목록 및 참가/나가기 -->
         <VBox spacing="10.0" prefWidth="270.0">
+            <!-- 세로 배치, 간격 10px, 폭 270px -->
             <padding><Insets topRightBottomLeft="10.0"/></padding>
+            <!-- 내부 여백 10px -->
             <children>
                 <Label fx:id="roomUsersTitle" text="참가자 (0명)"/>
+                <!-- 현재 활성 방의 참가자 타이틀 (인원 수 갱신용 fx:id) -->
+
                 <ListView fx:id="roomUsersListView" VBox.vgrow="ALWAYS"/>
+                <!-- 활성 방 참가자 목록 표시용 리스트뷰
+                     - VBox.vgrow=ALWAYS: 남는 세로 공간을 채움 -->
+
                 <HBox spacing="8.0">
+                    <!-- 참가/나가기 버튼 가로 배치 -->
                     <Button text="참가" onAction="#joinRoomAction" HBox.hgrow="ALWAYS"/>
+                    <!-- 방 목록에서 선택한 방에 참가: 컨트롤러의 joinRoomAction 실행
+                         - HBox.hgrow=ALWAYS: 버튼 가로 크기 확장 -->
+
                     <Button text="나가기" onAction="#leaveRoomAction" HBox.hgrow="ALWAYS"/>
+                    <!-- 현재 선택한 방에서 나가기: 컨트롤러의 leaveRoomAction 실행
+                         - HBox.hgrow=ALWAYS: 버튼 가로 크기 확장 -->
                 </HBox>
             </children>
         </VBox>
     </right>
 </BorderPane>
+<!-- BorderPane 루트 종료 -->
