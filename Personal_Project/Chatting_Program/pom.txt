@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?> <!-- XML 선언: 문서가 UTF-8 인코딩으로 작성됨 -->
+
+<project xmlns="http://maven.apache.org/POM/4.0.0"               <!-- 루트 요소: POM 네임스페이스 -->
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"   <!-- XML 스키마 인스턴스 네임스페이스 -->
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+                             http://maven.apache.org/xsd/maven-4.0.0.xsd"> <!-- 스키마 위치 지정 -->
+
+  <modelVersion>4.0.0</modelVersion>        <!-- POM 모델 버전(항상 4.0.0 사용) -->
+
+  <groupId>com.mycompany</groupId>          <!-- 그룹 식별자: 조직 도메인 역순 네이밍 관례 -->
+  <artifactId>p2p-chat</artifactId>         <!-- 산출물 식별자: 프로젝트 이름 -->
+  <version>1.0-SNAPSHOT</version>           <!-- 버전: 개발 스냅샷 표시 -->
+  <packaging>jar</packaging>                <!-- 패키징 타입: jar 로 산출 -->
+  <name>p2p-chat</name>                     <!-- 프로젝트 표시 이름(메타 정보) -->
+
+  <properties>                               <!-- 공통 속성 블록: 아래에서 ${...} 로 참조 -->
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding> <!-- 소스 인코딩 지정 -->
+    <!-- 현재 시스템 자바가 21이므로 release=21 권장 (22도 가능하지만 일단 21로 통일) --> <!-- 설명용 주석 -->
+    <maven.compiler.release>21</maven.compiler.release>                <!-- 자바 컴파일 대상 플랫폼을 21로 고정 -->
+
+    <exec.mainClass>com.mycompany.chat.App</exec.mainClass>            <!-- 애플리케이션 메인 클래스(클라이언트 UI 진입점) -->
+    <javafx.version>24.0.2</javafx.version>                            <!-- JavaFX 버전 중앙 관리 -->
+  </properties>
+
+  <dependencies>                            <!-- 의존성 목록 시작 -->
+    <!-- JavaFX: Maven이 런타임까지 알아서 관리하도록 scope 제거 --> <!-- 설명용 주석 -->
+    <dependency>                            <!-- JavaFX Controls 모듈: 버튼/라벨/텍스트필드 등 UI 위젯 -->
+      <groupId>org.openjfx</groupId>
+      <artifactId>javafx-controls</artifactId>
+      <version>${javafx.version}</version>  <!-- 위에서 정의한 버전 속성 사용 -->
+    </dependency>
+    <dependency>                            <!-- JavaFX FXML 모듈: FXML 로딩과 컨트롤러 바인딩 -->
+      <groupId>org.openjfx</groupId>
+      <artifactId>javafx-fxml</artifactId>
+      <version>${javafx.version}</version>
+    </dependency>
+
+    <!-- MySQL -->                           <!-- 설명용 주석 -->
+    <dependency>                            <!-- MySQL JDBC 드라이버: DB 연결에 필요 -->
+      <groupId>mysql</groupId>
+      <artifactId>mysql-connector-java</artifactId>
+      <version>8.0.28</version>
+    </dependency>
+
+    <!-- bcrypt -->                          <!-- 설명용 주석 -->
+    <dependency>                            <!-- BCrypt 해시 라이브러리: 비밀번호 해시와 검증 -->
+      <groupId>org.mindrot</groupId>
+      <artifactId>jbcrypt</artifactId>
+      <version>0.4</version>
+    </dependency>
+
+    <!-- Protocol Buffers -->                <!-- 설명용 주석 -->
+    <dependency>                            <!-- 프로토콜 버퍼 런타임: 현재 직접 사용 안 해도 잔존 가능 -->
+      <groupId>com.google.protobuf</groupId>
+      <artifactId>protobuf-java</artifactId>
+      <version>3.11.4</version>
+    </dependency>
+  </dependencies>                           <!-- 의존성 목록 끝 -->
+
+  <build>                                    <!-- 빌드 파이프라인 및 플러그인 설정 -->
+    <plugins>                                <!-- 사용 플러그인 목록 -->
+
+      <!-- 컴파일러: preview 제거, release=21 --> <!-- 설명용 주석 -->
+      <plugin>                                <!-- 자바 컴파일 플러그인 -->
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.10.1</version>
+        <configuration>
+          <release>${maven.compiler.release}</release>   <!-- 컴파일 시 대상 플랫폼을 21로 설정 -->
+        </configuration>
+      </plugin>
+
+      <!-- JavaFX 실행: 모듈 경로 수동 지정 불필요, mvn javafx:run 로 실행 --> <!-- 설명용 주석 -->
+      <plugin>                                <!-- JavaFX 애플리케이션 실행 플러그인 -->
+        <groupId>org.openjfx</groupId>
+        <artifactId>javafx-maven-plugin</artifactId>
+        <version>0.0.8</version>
+        <configuration>
+          <mainClass>${exec.mainClass}</mainClass>       <!-- 실행 시작 클래스 지정(App) -->
+        </configuration>
+        <executions>
+          <execution>                                   <!-- 목표 사용 선언 -->
+            <goals>
+              <goal>run</goal>                          <!-- mvn javafx:run 으로 실행 가능 -->
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+
+      <!-- 서버 쉽게 실행하려고 exec 목표 추가 --> <!-- 설명용 주석 -->
+      <plugin>                                <!-- JVM에서 임의의 main 클래스를 실행해 주는 플러그인 -->
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>exec-maven-plugin</artifactId>
+        <version>3.1.0</version>
+        <executions>
+          <execution>
+            <id>run-server</id>                         <!-- 호출 시 식별자: exec:java@run-server 형태 -->
+            <goals>
+              <goal>java</goal>                         <!-- 자바 main 실행 목표 -->
+            </goals>
+            <configuration>
+              <mainClass>com.mycompany.chat.ChatServer</mainClass> <!-- 실행 대상: 서버 메인 클래스 -->
+              <classpathScope>runtime</classpathScope>             <!-- 런타임 클래스패스 사용 -->
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+      <!-- 실행 가능한 JAR (주의: JavaFX는 mvn javafx:run 권장) --> <!-- 설명용 주석 -->
+      <plugin>                                <!-- JAR 생성 플러그인 -->
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <version>3.2.2</version>
+        <configuration>
+          <archive>                                        <!-- JAR 내부 메타 설정 -->
+            <manifest>                                     <!-- MANIFEST.MF 작성 -->
+              <mainClass>${exec.mainClass}</mainClass>     <!-- JAR의 Main-Class 기록 -->
+            </manifest>
+          </archive>
+        </configuration>
+      </plugin>
+
+    </plugins>
+  </build>
+
+</project> <!-- 루트 요소 종료 -->
