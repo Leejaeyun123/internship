@@ -1,13 +1,14 @@
 package com.example;
 
 public class Hello {
-    static void myMethod(String a, int b) {
-        System.out.println(a + " is " + b);
+    static int plusMethod(int x, int y) {
+        return x + y;
     }
-
+    static double plusMethod(double x, double y) {
+        return x + y;
+    }
     public static void main(String[] args) {
-        myMethod("A", 15);
-        myMethod("B", 16);
-        myMethod("C", 17);
+    
     }
 }
+
