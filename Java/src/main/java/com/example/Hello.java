@@ -1,14 +1,16 @@
 package com.example;
 
 public class Hello {
-    static int plusMethod(int x, int y) {
-        return x + y;
+    static int sum(int k) {
+        if (k > 0) {
+            return k + sum(k - 1);
+        } else {
+            return 0;
+        }
     }
-    static double plusMethod(double x, double y) {
-        return x + y;
-    }
+
     public static void main(String[] args) {
-    
+        int result = sum(10);
+        System.out.println(result);
     }
 }
-
