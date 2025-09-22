@@ -1,16 +1,11 @@
 package com.example;
 
 public class Hello {
-    static int sum(int k) {
-        if (k > 0) {
-            return k + sum(k - 1);
-        } else {
-            return 0;
-        }
+    public static void print() {
+        System.out.print("이게 실행될까요\n");
     }
 
     public static void main(String[] args) {
-        int result = sum(10);
-        System.out.println(result);
+        print();
     }
 }
