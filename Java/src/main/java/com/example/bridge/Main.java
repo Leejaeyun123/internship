@@ -1,3 +1,5 @@
+package com.example.bridge;
+
 public class Main {
     public static int sum(int start, int end) {
         if (end > start) {

@@ -1,3 +1,7 @@
 {
-    "java.configuration.updateBuildConfiguration": "interactive"
+  "java.jdt.ls.java.home": "/home/ljy/.sdkman/candidates/java/current",
+  "java.import.gradle.wrapper.enabled": true,
+  "java.import.gradle.java.home": "/home/ljy/.sdkman/candidates/java/current",
+  "java.gradle.buildServer.enabled": true,
+  "java.autobuild.enabled": false
 }
