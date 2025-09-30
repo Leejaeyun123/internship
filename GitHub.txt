@@ -1,4 +1,4 @@
-GitHub
+GitHub ttt
 
 ● GitHub에 코드를 업로드하는 절차
 1. 문자(아무거나)가 적힌 파일 생성
