@@ -9,7 +9,7 @@
       mainClass - public static void main을 가진 완전수식클래스명(FQCN). 대부분 필수(request가 launch일 때)
       args - 프로그램 인자. main(String[] args)로 전달. 선택
       console - 프로그램의 표준 입/출력을 어디에 연결할지 정하는 옵션. 선택. internalConsole : 디버그 콘솔 / integratedTerminal : 터미널 / externalTerminal : OS의 외부 터미널 창(gnome-terminal, cmd)
-      vmArgs - JVM 인자. 선택. main이 실행되기 전에 이미 적용. ex) 
+      vmArgs - JVM 인자. 선택. main이 실행되기 전에 이미 적용. ex) -Dfile.encoding=UTF-8 : 인코딩("문자 <-> 바이트"를 서로 바꾸는 규칙)을 생략한 I/O API들이 사용할 기본 인코딩을 UTF-8로 강제
       env, cwd, projectName, javaExec 등 - 선택 */
 {
   "version": "0.2.0",
