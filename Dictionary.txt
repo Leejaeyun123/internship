@@ -37,6 +37,10 @@
 
 3. 유지보수가 용이하고 같은 함수나 변수 이름이 다른 코드와 충돌하는 것을 막을 수 있음
 
+● 인자(Argument)
+1. 프로그래밍 언어에서 함수 호출 시 함수에 전달되는 값. 인수 또는 전달인자라고도 불림
+2. C언어 main 함수에 전달되는 인자를 보통 argc(argument count)와 argv(argument vector)로 나타냄
+
 ● 절차적 프로그래밍
 1. 데이터에 대한 작업을 수행하는 프로시저나 메서드를 작성하는 것
 
@@ -165,15 +169,17 @@ json.loads()나 JSON.parse()와 같은 함수가 JSON 파서의 역할을 수행
 3. C/C++은 Python처럼 JSON을 직접 다루는 내장 기능이 없기 때문에 외부 라이브러리(json-c, nlohmann/json)를 사용해야 함
 
 ● Java
-1. static은 해당 메서드가 ○○○ 클래스 자체에 속하며 ○○○ 클래스의 객체(인스턴스)에 속하는 게 아님
+1. JVM(Java Virtual Machine)은 OS에 종속받지 않고 CPU가 Java를 인식, 실행할 수 있게 하는 가상 컴퓨터. Java는 OS에 종속적이지 않아서 종속받지 않고 실행되기 위해선 OS 위에서 Java를 실행시킬 무언가가 필요. https://doozi0316.tistory.com/entry/1%EC%A3%BC%EC%B0%A8-JVM%EC%9D%80-%EB%AC%B4%EC%97%87%EC%9D%B4%EB%A9%B0-%EC%9E%90%EB%B0%94-%EC%BD%94%EB%93%9C%EB%8A%94-%EC%96%B4%EB%96%BB%EA%B2%8C-%EC%8B%A4%ED%96%89%ED%95%98%EB%8A%94-%EA%B2%83%EC%9D%B8%EA%B0%80
 
-2. void는 이 메서드에는 반환값이 없다는 것을 의미
+2. static은 해당 메서드가 ○○○ 클래스 자체에 속하며 ○○○ 클래스의 객체(인스턴스)에 속하는 게 아님
 
-3. return은 메서드 실행을 즉시 종료하고, (반환형이 있다면) 값을 호출자에게 돌려줌
-3 - 1. return 값; -> 반환형(int, double, String,...)이 void가 아닌 메서드에서만 사용
-3 - 2. return; -> void 메서드에서 조기 종료할 때 사용. 값 X
+3. void는 이 메서드에는 반환값이 없다는 것을 의미
 
-4. 메서드 오버로딩(Method Overloading)을 사용하면 여러 메서드가 서로 다른 매개변수를 갖는 동일한 이름을 가질 수 있음
+4. return은 메서드 실행을 즉시 종료하고, (반환형이 있다면) 값을 호출자에게 돌려줌
+4 - 1. return 값; -> 반환형(int, double, String,...)이 void가 아닌 메서드에서만 사용
+4 - 2. return; -> void 메서드에서 조기 종료할 때 사용. 값 X
+
+5. 메서드 오버로딩(Method Overloading)을 사용하면 여러 메서드가 서로 다른 매개변수를 갖는 동일한 이름을 가질 수 있음
 ex) static int plusMethod(int x, int y) {
       return x + y;
    }
@@ -181,8 +187,6 @@ ex) static int plusMethod(int x, int y) {
    static double plusMethod(double x, double y) {
       return x + y;
    }
-
-5. 
 
 
 

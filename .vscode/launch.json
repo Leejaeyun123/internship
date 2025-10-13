@@ -1,3 +1,16 @@
+ 
+/* 1.디버깅 설정을 저장하는 JSON 파일
+   2.언어, 실행 환경, 인자 등을 미리 정의할 수 있어 매번 설정할 필요 없이 버튼 한 번에 실행/디버깅 가능
+   3. version - 선택(권장)
+      configurations - 실행/디버그 프로필(type, name, request, mainClass...)들의 배열. 필수
+      type - 필수
+      name - 필수(실행/디버그 프로필 표시 이름)
+      request - 실행 방식. 필수("launch" 또는 "attach"). "launch" : VS Code가 새 JVM 프로그램을 직접 시작 / "attach" : 이미 실행 중인 JVM이 있을 때, 거기에 디버거만 연결
+      mainClass - public static void main을 가진 완전수식클래스명(FQCN). 대부분 필수(request가 launch일 때)
+      args - 프로그램 인자. main(String[] args)로 전달. 선택
+      console - 프로그램의 표준 입/출력을 어디에 연결할지 정하는 옵션. 선택. internalConsole : 디버그 콘솔 / integratedTerminal : 터미널 / externalTerminal : OS의 외부 터미널 창(gnome-terminal, cmd)
+      vmArgs - JVM 인자. 선택. main이 실행되기 전에 이미 적용. ex) 
+      env, cwd, projectName, javaExec 등 - 선택 */
 {
   "version": "0.2.0",
   "configurations": [

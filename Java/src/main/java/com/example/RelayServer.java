@@ -24,8 +24,8 @@ public class RelayServer {
             System.err.println("Usage: java com.example.RelayServer <tcpPort> <udpPort>");
             return;
         }
-        int tcpPort = Integer.parseInt(args[0]);
-        int udpPort = Integer.parseInt(args[1]);
+        int tcpPort = Integer.parseInt(args[0]); // args[0] = launch.json의 args의 첫 번째 인자 = "5000"
+        int udpPort = Integer.parseInt(args[1]); // args[1] = launch.json의 args의 두 번째 인자 = "6000"
 
         new RelayServer().run(tcpPort, udpPort);
     }
