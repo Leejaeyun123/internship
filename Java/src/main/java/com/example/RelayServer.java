@@ -1,20 +1,12 @@
 package com.example;
 
 import java.io.BufferedReader;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.*;
 import java.nio.charset.StandardCharsets;
 
-/**
- * 사용법: java com.example.RelayServer <tcpPort> <udpPort>
- * 예시:  java com.example.RelayServer 5000 6000
- *
- * 단순화 가정:
- *  - TCP는 "가장 최근 접속 1명"만 상대합니다.
- *  - UDP는 "가장 최근에 서버로 패킷을 보낸 주소 1곳"만 상대합니다.
- *  - TCP→UDP 전달은 UDP 피어가 한 번 이상 보낸 뒤(등록된 뒤)에 가능합니다.
- */
 public class RelayServer {
     private volatile PrintWriter currentTcpOut;     // 최근 TCP 클라이언트에게 쓰기
     private volatile SocketAddress lastUdpPeer;     // 최근 UDP 보낸 쪽 주소

@@ -1,15 +1,11 @@
 package com.example;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
+import java.io.BufferedReader; // 입력받은  
+import java.io.InputStreamReader; // 입력받은 inputStream을 문자(character) 단위 데이터로 변환시키는 중간다리 역할. 입력한 문자 값을 그대로 출력하기 위해 사용
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
 
-/**
- * 사용법: java com.example.TcpPeer <host> <tcpPort>
- * 예시:  java com.example.TcpPeer localhost 5000
- */
 public class TcpPeer {
     public static void main(String[] args) throws Exception {
         if (args.length != 2) {

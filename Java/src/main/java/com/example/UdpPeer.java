@@ -5,13 +5,6 @@ import java.io.InputStreamReader;
 import java.net.*;
 import java.nio.charset.StandardCharsets;
 
-/**
- * 사용법: java com.example.UdpPeer <serverHost> <serverUdpPort>
- * 예시:  java com.example.UdpPeer localhost 6000
- *
- * 최초에 아무 문자 한 줄 보내면 서버가 이 소켓 주소를 기억하고,
- * 이후 TCP→UDP 메시지를 이 주소로 보내줍니다.
- */
 public class UdpPeer {
     public static void main(String[] args) throws Exception {
         if (args.length != 2) {
@@ -42,6 +35,10 @@ public class UdpPeer {
             recv.setDaemon(true);
             recv.start();
 
+            // UDP 서버 주소 등록. UDP는 TCP와 다르게 "연결"이 없고, 목적지(IP:PORT)를 매 패킷마다 지정해야 함. 서버는 상대가 먼저 보낸 패킷의 송신자 주소를 보고 "여기로 보내면 된다"를 알 수 있음
+            byte[] AddressRegister = "UDP 주소 등록".getBytes(StandardCharsets.UTF_8);
+            sock.send(new DatagramPacket(AddressRegister, AddressRegister.length, addr, port));
+            
             // 송신 루프 (표준입력 → 서버)
             String line;
             while ((line = stdin.readLine()) != null) {
