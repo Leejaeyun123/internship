@@ -1,17 +1,11 @@
 package com.example;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-
 public class Hello {
-    public static void main(String[] args) throws IOException {
-        InputStream inputStream = System.in;
-        InputStreamReader reader = new InputStreamReader(inputStream);
-        
-        char[] chars = new char[3];
-        reader.read(chars);
-
-        System.out.println(chars);
+    public static void main(String[] args) {
+        int x = 10;
+        int y = 0;
+        System.out.println("ok1");
+        int result = x / y;
+        System.out.println("ok2");
     }
 }
