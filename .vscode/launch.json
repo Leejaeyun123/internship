@@ -16,10 +16,27 @@
   "configurations": [
     {
       "type": "java",
+      "name": "in_out_err",
+      "request": "launch",
+      "mainClass": "com.example.in_out_err",
+      "projectName": "java-playground"
+    },
+    {
+      "type": "java",
+      "name": "System",
+      "request": "launch",
+      "mainClass": "com.example.System",
+      "projectName": "java-playground"
+    },
+    {
+      "type": "java",
       "name": "Run RelayServer",
       "request": "launch",
       "mainClass": "com.example.RelayServer",
-      "args": ["5000", "6000"],
+      "args": [
+        "5000",
+        "6000"
+      ],
       "console": "integratedTerminal",
       "vmArgs": "-Dfile.encoding=UTF-8"
     },
@@ -28,7 +45,10 @@
       "name": "Run TcpPeer",
       "request": "launch",
       "mainClass": "com.example.TcpPeer",
-      "args": ["localhost", "5000"],
+      "args": [
+        "localhost",
+        "5000"
+      ],
       "console": "integratedTerminal",
       "vmArgs": "-Dfile.encoding=UTF-8"
     },
@@ -37,7 +57,10 @@
       "name": "Run UdpPeer",
       "request": "launch",
       "mainClass": "com.example.UdpPeer",
-      "args": ["localhost", "6000"],
+      "args": [
+        "localhost",
+        "6000"
+      ],
       "console": "integratedTerminal",
       "vmArgs": "-Dfile.encoding=UTF-8"
     },
