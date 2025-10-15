@@ -7,11 +7,11 @@ import java.nio.charset.StandardCharsets;
 
 public class UdpPeer {
     public static void main(String[] args) throws Exception {
-        if (args.length != 2) return;
-        InetAddress host = InetAddress.getByName(args[0]);
-        int port = Integer.parseInt(args[1]);
+        if (args.length != 2) return;   // 조기 종료 조건. host, port가 없으면 잘못된 상태로 진행하지 않도록 즉시 종료
+        InetAddress host = InetAddress.getByName(args[0]);  // 문자열 호스트명을 주소 객체로 해석(이름 -> IP)
+        int port = Integer.parseInt(args[1]);   // 인자 문자열을 정수로 변환(파싱, 문자 -> 숫자)
 
-        try (DatagramSocket sock = new DatagramSocket();
+        try (DatagramSocket sock = new DatagramSocket();    // UDP 소켓 생성. 바인딩(포트 등록)을 안 하면 OS가 자동으로 사용 가능한 포트를 골라 바인딩
              BufferedReader stdin = new BufferedReader(new InputStreamReader(System.in, StandardCharsets.UTF_8))) {
 
             byte[] hello = "UDP 주소 등록".getBytes(StandardCharsets.UTF_8);    // 등록용 1회 전송
