@@ -225,9 +225,13 @@ public class Main2 {
     }
 }  <- Main2.java
 
-7. 패키지(Package) https://docs.oracle.com/javase/8/docs/api/
+7. enum은 정해진 값(상수)들의 집합을 하나의 타입으로 묶는 사용자 정의 자료형. 클래스가 상수만으로 작성돼 있으면 반드시 class로 선언 X
+ex) enum Level {LOW, MEDIUM, HIGH}  <- 이 객체는 상수의 집합이라는 것을 명시적으로 표현
+7 - 1. default 생성자는 private로 돼 있으며 public으로 변경하는 경우 컴파일 에러
 
-8. 입/출력(I/0), 스트림(Stream), 버퍼(Buffer) https://whitepro.tistory.com/591
+. 패키지(Package) https://docs.oracle.com/javase/8/docs/api/
+
+. 입/출력(I/0), 스트림(Stream), 버퍼(Buffer) https://whitepro.tistory.com/591
 
 . 메서드 오버로딩(Method Overloading)을 사용하면 여러 메서드가 서로 다른 매개변수를 갖는 동일한 이름을 가질 수 있음
 ex) static int plusMethod(int x, int y) {

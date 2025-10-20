@@ -16,6 +16,27 @@
   "configurations": [
     {
       "type": "java",
+      "name": "Aniaml",
+      "request": "launch",
+      "mainClass": "com.example.Aniaml",
+      "projectName": "java-playground"
+    },
+    {
+      "type": "java",
+      "name": "Animal",
+      "request": "launch",
+      "mainClass": "com.example.Animal",
+      "projectName": "java-playground"
+    },
+    {
+      "type": "java",
+      "name": "Main",
+      "request": "launch",
+      "mainClass": "com.example.Main",
+      "projectName": "java-playground"
+    },
+    {
+      "type": "java",
       "name": "in_out_err",
       "request": "launch",
       "mainClass": "com.example.in_out_err",
