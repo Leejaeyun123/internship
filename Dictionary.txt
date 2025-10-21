@@ -177,6 +177,7 @@ json.loads()나 JSON.parse()와 같은 함수가 JSON 파서의 역할을 수행
 
 ● Java
 1. JVM(Java Virtual Machine)은 OS에 종속받지 않고 CPU가 Java를 인식, 실행할 수 있게 하는 가상 컴퓨터. Java는 OS에 종속적이지 않아서 종속받지 않고 실행되기 위해선 OS 위에서 Java를 실행시킬 무언가가 필요. https://doozi0316.tistory.com/entry/1%EC%A3%BC%EC%B0%A8-JVM%EC%9D%80-%EB%AC%B4%EC%97%87%EC%9D%B4%EB%A9%B0-%EC%9E%90%EB%B0%94-%EC%BD%94%EB%93%9C%EB%8A%94-%EC%96%B4%EB%96%BB%EA%B2%8C-%EC%8B%A4%ED%96%89%ED%95%98%EB%8A%94-%EA%B2%83%EC%9D%B8%EA%B0%80
+1 - 1. JNI(Java Native Interface)는 
 
 2. void는 이 메서드에는 반환값이 없다는 것을 의미
 
@@ -228,6 +229,17 @@ public class Main2 {
 7. enum은 정해진 값(상수)들의 집합을 하나의 타입으로 묶는 사용자 정의 자료형. 클래스가 상수만으로 작성돼 있으면 반드시 class로 선언 X
 ex) enum Level {LOW, MEDIUM, HIGH}  <- 이 객체는 상수의 집합이라는 것을 명시적으로 표현
 7 - 1. default 생성자는 private로 돼 있으며 public으로 변경하는 경우 컴파일 에러
+7 - 2. 메서드는 values(), valueOf(), ordinal()
+
+8. Scanner 입력 유형 : https://www.w3schools.com/java/java_ref_scanner.asp
+ex) Scanner myObj = new Scanner(System.in);
+    String name = myObj.nextLine();
+
+9. 오류 및 예외 유형(try...catch, throw) : https://www.w3schools.com/java/java_ref_errors.asp
+
+. new로 객체 생성 시 괄호 안에 넣는 것은 객체를 어떤 초기 상태로 만들지를 생성자에게 넘겨 주는 값
+ - 1. Scanner myObj = new Scanner(System.in);  <-  Scanner(InputStream source) 생성자에게 전달돼, 키보드 입력을 읽는 스캐너가 만들어짐
+ - 2. new 객체 생성(생성자)과 new 없는 객체 생성(정적 팩토리 메서드)의 차이는 항상 새 인스턴스를 만들 거나(생성자) 아니면 만들 수도 있고, 기존 인스턴스를 재활용할 수도 있는 것(정적 팩토리 메서드)
 
 . 패키지(Package) https://docs.oracle.com/javase/8/docs/api/
 
